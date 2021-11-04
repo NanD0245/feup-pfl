@@ -1,8 +1,9 @@
 import Data.Char
+import Text.XHtml (meta)
 
 --EX1
 ex1 :: Num a => [a] -> a
-ex1 l = sum [x^2 | x<-l] 
+ex1 l = sum [x^2 | x<-l]
 
 --EX2
 aprox :: Int -> Double
@@ -17,7 +18,7 @@ dotprod a b = sum [ x * y | (x,y) <- zip a b ]
 
 --EX4
 divprop :: Int -> [Int]
-divprop a = [x | x<-[1..div a 2], mod a x == 0] 
+divprop a = [x | x<-[1..div a 2], mod a x == 0]
 
 --EX5
 perfeitos :: Int -> [Int]
@@ -28,9 +29,9 @@ pitagoricos :: Int -> [(Int,Int,Int)]
 pitagoricos a = [(x,y,z) | x<-[1..a],y<-[1..a],z<-[1..a],x^2 + y^2 == z^2]
 
 --EX7
-primo :: Int -> Bool 
-primo a | length (divprop a) > 1 = False 
-        | otherwise = True 
+primo :: Int -> Bool
+primo a | length (divprop a) > 1 = False
+        | otherwise = True
 
 --EX8
 binom :: Int -> Int -> Int
@@ -41,23 +42,23 @@ pascal n = [[binom x y | y<-[0..x]] | x<-[0..n]]
 
 --EX9
 cifrar :: Int -> String -> String --uppercase letters only
-cifrar a s = [  if fromEnum x + a > 90 
-                        then (toEnum (fromEnum x + a - 26)::Char) 
-                else (if fromEnum x + a < 65 && x /= ' ' 
+cifrar a s = [  if fromEnum x + a > 90
+                        then (toEnum (fromEnum x + a - 26)::Char)
+                else (if fromEnum x + a < 65 && x /= ' '
                         then (toEnum (fromEnum x + a + 26)::Char)
-                else (if x == ' ' 
+                else (if x == ' '
                         then x
                 else toEnum (fromEnum x + a)::Char)) | x <- s ]
 
 --EX10
-myAnd :: [Bool] -> Bool 
+myAnd :: [Bool] -> Bool
 myAnd l | length l == 1 && head l = True
-        | not (head l) = False 
+        | not (head l) = False
         | otherwise = myAnd (tail l)
 
 myOr :: [Bool] -> Bool
-myOr l | length l == 1 && not (head l) = False 
-       | head l = True 
+myOr l | length l == 1 && not (head l) = False
+       | head l = True
        | otherwise = myOr (tail l)
 
 myConcat :: [[a]] -> [a]
@@ -68,13 +69,13 @@ myReplicate :: Int -> a -> [a]
 myReplicate 0 y = []
 myReplicate x y = [y] ++ myReplicate (x-1) y
 
-(!!) :: [a] -> Int -> a 
+(!!) :: [a] -> Int -> a
 (!!) l 0 = head l
 (!!) l x = (Main.!!) (tail l) (x-1)
 
-myElem :: Eq a => a -> [a] -> Bool 
-myElem a [] = False 
-myElem a l | head l == a = True 
+myElem :: Eq a => a -> [a] -> Bool
+myElem a [] = False
+myElem a l | head l == a = True
            | otherwise = myElem a (tail l)
 
 --EX11
@@ -124,13 +125,13 @@ toBits x    | x == 0 = []
             | otherwise = toBits (div x 2) ++ [mod x 2]
 
 --EX18
-fromBits :: [Int] -> Int 
+fromBits :: [Int] -> Int
 fromBits [] = 0
 fromBits l  | head l == 1 = 2 ^ (length l - 1) + fromBits (tail l)
             | otherwise = fromBits (tail l)
 
 --EX19
-mdc :: Int -> Int -> Int 
+mdc :: Int -> Int -> Int
 mdc a b | b == 0 = a
         | otherwise = mdc b (mod a b)
 
@@ -141,15 +142,35 @@ myInsert x l | head l > x = x : l
              | otherwise = head l : myInsert x (tail l)
 
 --EX21
---minimum :: Ord a => [a] -> a
+myMinimum :: Ord a => [a] -> a
+myMinimum l   | length l == 1 = head l
+            | otherwise = if head l < myMinimum (tail l) then head l else myMinimum (tail l)
 
---delete :: Eq a => a -> [a] -> [a]
+myDelete :: Eq a => a -> [a] -> [a]
+myDelete a [] = []
+myDelete a l    | head l == a = tail l
+                | otherwise = head l : myDelete a (tail l)
 
---ssort :: Ord a => [a] -> [a]
+ssort :: Ord a => [a] -> [a]
+ssort [] = []
+ssort l = myMinimum l : ssort (myDelete (myMinimum l) l)
 
 --EX22
---merge :: Ord a => [a] -> [a] -> [a]
---msort :: Ord a => [a] -> [a]
+myMerge :: Ord a => [a] -> [a] -> [a]
+myMerge [] [] = []
+myMerge [] l = l
+myMerge l [] = l
+myMerge l1 l2   | head l1 < head l2 = head l1 : myMerge (tail l1) l2
+                | otherwise = head l2 : myMerge l1 (tail l2)
+
+metades :: [a] -> ([a],[a])
+metades l = splitAt (div (length l) 2) l
+
+msort :: Ord a => [a] -> [a]
+msort [] = []
+msort l | length l == 1 = [head l]
+        | otherwise = myMerge (msort (fst (metades l))) (msort(snd (metades l)))
+
 
 --EX23
 addPoly :: [Int] -> [Int] -> [Int]

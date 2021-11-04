@@ -145,12 +145,12 @@ middle3 a b c | b <= a && c >= a = a
               | a >= c && b <= c = c
 
   --a)
-mediana :: Num a => a -> a -> a -> a
+mediana :: Ord a => a -> a -> a -> a
 mediana a b c = middle3 a b c
 
   --b)
-medianaB :: Num a => a -> a -> a -> a
-medianaB a b c = a+b+c - min3 a b c - (max3 a b c)
+medianaB :: (Ord a,Num a) => a -> a -> a -> a
+medianaB a b c = a+b+c - min3 a b c - max3 a b c
 
 
 
