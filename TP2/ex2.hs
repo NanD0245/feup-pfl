@@ -12,7 +12,7 @@ aprox n = sum [(-1)^x / fromIntegral (2*x + 1) | x<-[0..n]] * 4
 aprox2 :: Int -> Double
 aprox2 n = sum [(-1)^x / fromIntegral (x + 1)^2 | x<-[0..n]] * 12
 
---EX#3
+--EX3
 dotprod :: [Float] -> [Float] -> Float
 dotprod a b = sum [ x * y | (x,y) <- zip a b ]
 
