@@ -72,4 +72,3 @@ somaArv Folha (No y esq2 dir2) = No y esq2 dir2
 somaArv (No x esq1 dir1) (No y esq2 dir2) = No (x+y) (somaArv esq1 esq2) (somaArv dir1 dir2)
 
 --EX7
-
