@@ -34,8 +34,8 @@ calcularAux stk s = calc (calcularAux stk (tail s)) (head s)
 --EX4
 data Set a = Empty | Node a (Set a) (Set a)
 
-empty :: Set a
-empty = Empty
+emptySet :: Set a
+emptySet = Empty
 
 insert :: Ord a => a -> Set a -> Set a
 insert a Empty = Node a Empty Empty
@@ -58,11 +58,11 @@ union :: Ord a => Set a -> Set a -> Set a
 union a b = fst (until (\(x,y) -> null y) (\(x,y) -> (insert (head y) x, tail y)) (a, listar b))
 
 intersect :: Ord a => Set a -> Set a -> Set a
-intersect a b = insertLista l empty where l = [x | x <- listar a,  member x b]
+intersect a b = insertLista l emptySet where l = [x | x <- listar a,  member x b]
 
 difference :: Ord a => Set a -> Set a -> Set a
-difference a b = insertLista (l1 ++ l2) empty where l1 = [x | x <- listar a, not (member x b)] 
-                                                    l2 = [x | x <- listar b, not (member x a)]
+difference a b = insertLista (l1 ++ l2) emptySet where  l1 = [x | x <- listar a, not (member x b)] 
+                                                        l2 = [x | x <- listar b, not (member x a)]
 
 insertLista :: Ord a => [a] -> Set a -> Set a
 insertLista [] a = a
