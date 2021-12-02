@@ -70,8 +70,8 @@ insertLista (x:xs) a = insertLista xs (insert x a)
 
 main :: IO()
 main = do
-  userInput <- getLine
-  putStr("Result= " ++ show (calcular userInput))
+    userInput <- getLine
+    putStr("Result= " ++ show (calcular userInput))
 
 --EX6
 data Map k v = Vazio | No k v (Map k v) (Map k v)
