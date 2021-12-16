@@ -239,5 +239,27 @@ replace(L1,I,O,N,L2) :- delete_elem(I,L1,O,L),
                         insert_elem(I,L,N,L2).
 
 
+% EX7
+% a)
+list_append([],L2,L2).
+list_append([H|T],L2,[H|T3]) :- list_append(T,L2,T3). 
 
+% b)
+list_member(X,[X|_]).
+list_member(X,[H|T]) :- list_member(X,T).
 
+% c)
+list_last([H|T],R) :- append([H],T,[R|T]).
+
+% d)
+list_nth(0,[X|T],X).
+list_nth(N,[H|T],X) :-  N > 0,
+                    N1 is N - 1,
+                    list_nth(N1,T,X).
+
+% e)
+list_append(L1,R) :- list_append_aux(L1,[],R).
+
+list_append_aux([],L,L).
+list_append_aux([H|T],Acc,L) :- append(Acc,H,R),
+                                list_append_aux(T,R,L).
