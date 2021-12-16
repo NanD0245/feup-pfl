@@ -263,3 +263,31 @@ list_append(L1,R) :- list_append_aux(L1,[],R).
 list_append_aux([],L,L).
 list_append_aux([H|T],Acc,L) :- append(Acc,H,R),
                                 list_append_aux(T,R,L).
+
+% f)
+list_del(L1,X,R) :- append(La,[X|Lb],L1),
+                    append(La,Lb,R).
+
+% g)
+list_before(X,Y,L) :-   append(La,[X|Lb],L),
+                        append(Lc,[Y|Ld],Lb).
+
+% h)
+list_replace_one(X,Y,L1,L2) :-  append(La,[X|Lb],L1),
+                                append(La,[Y|Lb],L2).
+
+% i)
+list_repeated(X,L) :-   append(La,[X|Lb],L),
+                        append(Lc,[X|Ld],Lb).
+
+% j)
+list_slice(L1,I,N,R) :- append(La,Lb,L1),
+                        length(La, I),
+                        append(R,Ld,Lb),
+                        length(R,N).
+                        
+% k)
+list_shift_rotate(L1,N,R) :-    append(La,Lb,L1),
+                                length(La, N),
+                                append(Lb,La,R).
+                                
