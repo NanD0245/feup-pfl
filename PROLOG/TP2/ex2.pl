@@ -291,3 +291,47 @@ list_shift_rotate(L1,N,R) :-    append(La,Lb,L1),
                                 length(La, N),
                                 append(Lb,La,R).
                                 
+% EX8
+% a)
+list_to(N,L) :- list_to_aux(N,[],L).
+
+list_to_aux(0,L,L).
+list_to_aux(N, Acc, L) :-   N > 0,
+                            N1 is N - 1,
+                            list_to_aux(N1,[N|Acc],L).
+
+% b)
+list_from_to(Inf,Sup,R) :- list_from_to_aux(Inf,Sup,[],R).
+
+list_from_to_aux(Inf,Sup,Acc,L) :-  Sup >= Inf,
+                                    N is Sup - 1,
+                                    list_from_to_aux(Inf,N,[Sup|Acc],L).
+list_from_to_aux(Inf,Sup,L,L).
+
+% c)
+list_from_to_step(Inf,Step,Sup,R) :-    list_from_to_step_aux(Inf,Step,Sup,[],R).
+
+list_from_to_step_aux(Inf,Step,Sup,Acc,L) :-    Inf =< Sup,
+                                                N is Inf + Step,
+                                                append(Acc,[Inf],S),
+                                                list_from_to_step_aux(N,Step,Sup,S,L).
+list_from_to_step_aux(Inf,Step,Sup,L,L).
+
+% e)
+primes(N,L) :- primes_aux(N,[],L).
+
+primes_aux(1,L,L).
+primes_aux(N,Acc,L) :-  N > 1,
+                        N1 is N - 1,
+                        (isPrime(N) -> primes_aux(N1,[N|Acc],L) ; primes_aux(N1,Acc,L)).
+
+% f)
+fibs(N,L) :-    N1 is N - 1,
+                fibs_aux(N1,[],L1),
+                (N =:= 0 -> append([],L1,L) ; append([0],L1,L)).
+
+fibs_aux(0,L,L).
+fibs_aux(N,Acc,L) :-    N > 0,
+                        N1 is N - 1,
+                        fibonacci(N,F),
+                        fibs_aux(N1,[F|Acc],L).
