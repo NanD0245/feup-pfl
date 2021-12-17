@@ -363,3 +363,49 @@ un_rle_aux(N,X,Acc,L) :-    N > 0,
                             append(Acc,[X],L1),
                             un_rle_aux(N1,X,L1,L).
 
+% EX10
+% a)
+is_ordered([]).
+is_ordered([X]).
+is_ordered([X,Y|T]) :-  X < Y,
+                        is_ordered([Y|T]).
+
+% b)
+insert_ordered(V,L1,R) :- insert_ordered(V,L1,[],R).
+
+insert_ordered(V,[],Acc,R) :- append(Acc,[V],R).
+insert_ordered(V,[H|T],Acc,R) :-    H < V,
+                                    append(Acc,[H],L1),
+                                    insert_ordered(V,T,L1,R).
+
+insert_ordered(V,L,Acc,R) :- append(Acc,[V|L],R).
+
+% c)
+insert_sort(L1,R) :- insert_sort(L1,[],R).
+
+insert_sort([],L,L).
+insert_sort([X|T],Acc,R) :- insert_ordered(X,Acc,L),
+                            insert_sort(T,L,R).
+
+% EX11
+pascal(N,L) :- pascal(N,[],L).
+
+pascal(0,L,L).
+pascal(N,Acc,L) :-  N > 0,
+                    pascal_line(N,R),
+                    N1 is N-1,
+                    append([R],Acc,L1),
+                    pascal(N1,L1,L).
+
+pascal_line(1,[1]).
+pascal_line(2,[1,1]).
+pascal_line(N, L) :-    Ant is N - 1,
+                        pascal_line(Ant,L2),
+                        pascal_line_aux(L2,R),
+                        append([1|R],[1],L).
+
+pascal_line_aux([X,Y],[Z]) :-   Z is X + Y.
+pascal_line_aux([X,Y|L], Z) :-  H is X + Y,
+                                pascal_line_aux([Y|L],L2),
+                                Z = [H|L2].
+                                    
