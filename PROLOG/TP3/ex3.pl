@@ -160,3 +160,220 @@ get_tree(N,C) :-    N1 is N - 1,
                     print_n('*',C),
                     print_n(' ',N1),
                     nl, get_tree(N1,C1).
+
+% EX5
+
+female('Grace').
+male('Frank').
+female('DeDe').
+male('Jay').
+female('Gloria').
+male('Javier').
+female('Barb').
+male('Merle').
+male('Phill').
+female('Claire').
+female('Mitchell').
+male('Joe').
+female('Manny').
+male('Cameron').
+female('Pameron').
+male('Bo').
+male('Dylan').
+female('Haley').
+female('Alex').
+male('Luke').
+female('Lily').
+male('Rexford').
+male('Calhoun').
+male('George').
+female('Poppy').
+
+parent('Grace','Phill').
+parent('Frank','Phill').
+parent('DeDe','Claire').
+parent('Jay','Claire').
+parent('DeDe','Mitchell').
+parent('Jay','Mitchell').
+parent('Gloria','Joe').
+parent('Jay','Joe').
+parent('Gloria','Manny').
+parent('Javier','Manny').
+parent('Barb','Cameron').
+parent('Merle','Cameron').
+parent('Barb','Pameron').
+parent('Merle','Pameron').
+parent('Phill','Haley').
+parent('Claire','Haley').
+parent('Phill','Alex').
+parent('Claire','Alex').
+parent('Phill','Luke').
+parent('Claire','Luke').
+parent('Mitchell','Lily').
+parent('Cameron','Lily').
+parent('Mitchell','Rexford').
+parent('Cameron','Rexford').
+parent('Pameron','Calhoun').
+parent('Bo','Calhoun').
+parent('Dylan','George').
+parent('Haley','George').
+parent('Dylan','Poppy').
+parent('Haley','Poppy').
+
+% a)
+children(Person, Children) :- findall(Child, parent(Person,Child), Children).
+
+% b)
+children_pair(P,C) :- findall(P-Child, parent(P,Child),C).
+
+children_of(LP,LC) :- children_of(LP,[],LC).
+
+children_of([],L,L) :- !.
+children_of([H|T],Acc,L) :- children_pair(H,L1),
+                            append(Acc,L1,New),
+                            children_of(T,New,L).
+
+% c)
+relative(P1,P2) :- parent(P1,P2).
+relative(P1,P2) :- parent(P2,P1).
+
+family(F) :- setof(P2, P1^relative(P1,P2),F).
+
+% d)
+couple(X-Y) :- parent(X,Z), parent(Y,Z), X \= Y.
+
+% e)
+couples(L) :- setof(C, couple(C), L).
+
+% f)
+spouse_children(P,S/C) :- setof(C, (couple(P-S), parent(P,C), parent(S,C)), C).
+
+% g)
+spouse_children_list(P,L) :- setof(S/L1, spouse_children(P,S/L1), L).
+
+parents(Child,Parents) :- findall(P,parent(P,Child),Parents).
+
+immediate_family(Person, P-C) :-    parents(Person,P),
+                                    spouse_children_list(Person,C).
+
+% h)
+parents_of_two(Parents) :- setof(P, X^Y^(parent(P,X),parent(P,Y),X \= Y), Parents).
+
+% EX6
+uc(algoritmos).
+uc(bases_de_dados).
+uc(compiladores).
+uc(estatistica).
+uc(redes).
+
+teacher(adalberto,algoritmos).
+teacher(bernardete,bases_de_dados).
+teacher(capitolino,compiladores).
+teacher(diogenes,estatistica).
+teacher(ermelinda,redes).
+
+student(alberto,algoritmos).
+student(bruna,algoritmos).
+student(cristina,algoritmos).
+student(diogo,algoritmos).
+student(eduarda,algoritmos).
+student(antonio,bases_de_dados).
+student(bruno,bases_de_dados).
+student(cristina,bases_de_dados).
+student(duarte,bases_de_dados).
+student(eduardo,bases_de_dados).
+student(alberto,compiladores).
+student(bernardo,compiladores).
+student(clara,compiladores).
+student(diana,compiladores).
+student(eurico,compiladores).
+student(antonio,estatistica).
+student(bruna,estatistica).
+student(claudio,estatistica).
+student(duarte,estatistica).
+student(eva,estatistica).
+student(alvaro,redes).
+student(beatriz,redes).
+student(claudio,redes).
+student(diana,redes).
+student(eduardo,redes).
+
+% a)
+teachers(Teachers) :- setof(T,UC^teacher(T,UC),Teachers).
+
+% b) --the same
+
+% c)
+students_of(T, S) :- setof(A,UC^(teacher(T,UC), student(A,UC)),S).
+
+% d)
+teachers_of(S, T) :- setof(P, UC^(student(S,UC), teacher(P,UC)),T).
+
+% e)
+common_courses(S1, S2, C) :- setof(UC,(student(S1,UC),student(S2,UC)),C).
+
+% f)
+more_than_one_course(L) :- setof(S,UC1^UC2^(student(S,UC1),student(S,UC2),UC1 \= UC2),L).
+
+% g)
+colleague(X,Y) :- student(X,_UC), student(Y,_UC), X \= Y.
+
+strangers(X,Y) :- \+ colleague(X,Y), X \= Y.
+
+strangers(L) :- setof(S1-S2, UC1^UC2^(student(S1,UC1), student(S2,UC2), strangers(S1,S2)),L).
+
+% h)
+good_groups(L) :- setof(S1-S2,colleague(S1,S2),L).
+
+% EX7
+
+class(pfl, t, '1 Seg', 11, 1).
+class(pfl, t, '4 Qui', 10, 1).
+class(pfl, tp, '2 Ter', 10.5, 2).
+class(lbaw, t, '1 Seg', 8, 2).
+class(lbaw, tp, '3 Qua', 10.5, 2).
+class(ltw, t, '1 Seg', 10, 1).
+class(ltw, t, '4 Qui', 11, 1).
+class(ltw, tp, '5 Sex', 8.5, 2).
+class(fsi, t, '1 Seg', 12, 1).
+class(fsi, t, '4 Qui', 12, 1).
+class(fsi, tp, '3 Qua', 8.5, 2).
+class(rc, t, '4 Qui', 8, 2).
+class(rc, tp, '5 Sex', 10.5, 2).
+
+% a)
+same_day(UC1, UC2) :-   class(UC1,_,D,_,_),
+                        class(UC2,_,D,_,_).
+
+% b)
+daily_courses(Day, Courses) :- findall(UC,class(UC,_,Day,_,_),Courses).
+
+% c)
+short_classes(L) :- findall(UC-Day/Hour, (class(UC,_,Day,Hour,D), D < 2), L).
+
+% d)
+course_classes(Course, Classes) :- findall(Day/Hour/Type, class(Course,Type,Day,Hour,_), Classes).
+
+% e)
+courses(L) :- setof(UC, A^B^C^D^class(UC,A,B,C,D), L). 
+
+% f)
+schedule :- setof(Day/Time-Dur/UC/Type, class(UC,Type,Day,Time,Dur), L),
+            write(L).
+
+% g)
+translate('1 Seg','seg'). 
+translate('2 Ter','ter'). 
+translate('3 Qua','qua'). 
+translate('4 Qui','qui'). 
+translate('5 Sex','sex').
+
+schedule_formatted :-   setof(New/Time-Dur/UC/Type, Day^(class(UC,Type,Day,Time,Dur),translate(Day,New)), L),
+                        write(L).
+
+% h)
+find_class :-   read(Day),
+                read(Hour),
+                class(UC,Type,Day,Hour,Dur),
+                write(UC/Type/Day/Hour/Dur).
+
