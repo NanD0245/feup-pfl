@@ -84,11 +84,98 @@ add_args(Term,Arity,[Arg|T]) :- arg(Arity,Term,Arg),
 :-op(500, yfx, la).
 :-op(500, xfy, ra).
 
-a) a ra (b na c)
+a) a ra b na c
+a xfy b xfx c
+a xfy (b xfx c)
+
 b) a la b na c
-c) (a na b) la c
+a yfx b xfx c
+Conflito: 
+    -> la: (a yfx b) xfx c
+    -> na: a yfx (b xfx c)
+
+c) a na b la c
+a xfx b yfx c
+(a xfx b) yfx c
+
 d) a na b ra c
+a xfx b xfy c
+Conflito: 
+    -> na: (a xfx b) xfy c
+    -> ra: a xfx (b xfy c)
+
 e) a na b na c
-f) ((a) la b) la c
+a xfx b xfx c
+Conflito: 
+    -> na1: (a xfx b) xfx c
+    -> na2: a xfx (b xfx c)
+
+
+f) a la b la c
+a yfx b yfx c
+(a yfx b) yfx c
+
 g) a ra (b ra (c))
+a xfy b xfy c
+a xfy (b xfy c)
 */
+
+/* EX4
+:-op(550, xfx, de).
+:-op(500, fx, aula).
+:-op(550, xfy, pelas).
+:-op(550, xfx, e).
+:-op(600, xfx, as).
+
+a) aula t de pfl as segundas pelas 11.
+(fx t xfx pfl) xfx (segundas xfy 11)
+((fx t) xfx pfl) xfx (segundas xfy 11)
+
+b) aula tp de pfl as tercas pelas 10 e 30
+(fx tp xfx pfl) xfx (tercas xfy 10 xfx 30)
+((fx tp) xfx pfl) xfx (tercas xfy (10 xfx 30))
+
+c) aula 11 e aula 12 as 4 pelas cinco pelas 6 pelas sete
+(fx 11 xfx fx 12) xfx (4 xfy cinco xfy 6 xfy sete)
+((fx 11) xfx (fx 12)) xfx (4 xfy (cinco xfy 6 xfy sete))
+((fx 11) xfx (fx 12)) xfx (4 xfy (cinco xfy 6 (xfy sete)))
+*/
+
+% EX5
+% a)
+:- op(500,fx,flight).
+:- op(600,xfx,from).
+:- op(550,xfx,to).
+:- op(550,yfx,at).
+:- op(500,xfx,:).
+
+flight tp1949 from porto to lisbon at 16:15.
+
+% b)
+:- op(550,fx,if).
+:- op(600,xfy,then).
+:- op(600,xfy,else).
+
+if X then Y else _Z :- X,Y.
+if X then _Y else Z :- \+ X, Z.
+
+% EX6
+% a)
+:- op(500,xfx,exists_in).
+
+X exists_in L :- member(X, L).
+
+% b)
+:- op(550,fy,append).
+:- op(550,xfx,to).
+:- op(600,yfx,results).
+
+append A to B results C :- append(B,A,C).
+
+% c)
+:- op(550,fy,remove).
+:- op(550,xfx,from).
+:- op(600,yfx,results).
+
+remove Elem from List results Result :- append(L1,[Elem|L2],List),
+                                        append(L1,L2,Result).
