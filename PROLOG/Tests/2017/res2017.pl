@@ -173,6 +173,7 @@ distance(A,A,0).
 distance(A,B,D) :- distance(B,A,D), !.*/
 
 % L = [2/1-8,3/1-8,4/1-7,5/1-7,3/2-2,4/2-4,5/2-4,4/3-3,5/3-3,5/4-1].
+
 % 12
 % areClose(+Dist,+MatDist,-Pares)
 areClose(Dist,MatDist,Pares) :- areCloseAux(Dist,MatDist,[],Pares).
