@@ -177,23 +177,3 @@ all_shortest_safe_paths(Origin,Destination,ProhibitedNodes,ListOfPaths) :-
         shortest_safe_path(Origin,Destination,ProhibitedNodes,Path),
         length(Path,Len)
     ),ListOfPaths).
-
-
-connects_bfs([[F|T]|_], F, _, [F|T]).
-connects_bfs([[S|T]|R], F, V, Sol):-
-    findall([N,S|T],
-        ( edge(S, N),
-        \+ member(N, V),
-        \+ member(N, [S|T])
-    ), L),
-    append(R, L, NR),
-    connects_bfs(NR, F, [S|V],Sol).
-
-
-
-
-
-
-
-
-
