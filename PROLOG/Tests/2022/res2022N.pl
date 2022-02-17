@@ -149,10 +149,45 @@ edge(d,e).
 edge(d,f).
 edge(e,f).
 
+:- use_module(library(lists)).
+
 % shortest_safe_path(+Origin, +Destination, +ProhibitedNodes, -Path)
-shortest_safe_path(Origin,Destination,ProhibitedNodes,Path). % por fazer
+shortest_safe_path(Origin,Destination,ProhibitedNodes,Path) :-
+    \+ member(Origin,ProhibitedNodes),
+    \+ member(Destination,ProhibitedNodes),
+    bfs([[Origin]],Destination,ProhibitedNodes,InvPath),
+    reverse(InvPath,Path).
+
+bfs( [ [Nf|T]|_], Nf, _, [Nf|T]).
+bfs( [ [Na|T]|Ns], Nf, PNs, Sol):-
+    findall(
+        [Nb,Na|T],
+        (edge(Na,Nb), \+member(Nb, [Na|T]), \+member(Nb, PNs)),
+        Ns1),
+    append(Ns, Ns1, Ns2),
+    bfs(Ns2, Nf, PNs, Sol).
+
+% 17
+% all_shortest_safe_paths(+Origin, +Destination, +ProhibitedNodes, -ListOfPaths)
+all_shortest_safe_paths(Origin,Destination,ProhibitedNodes,ListOfPaths) :-
+    shortest_safe_path(Origin,Destination,ProhibitedNodes,ShortestPath),
+    !,
+    length(ShortestPath,Len),
+    findall(Path,(
+        shortest_safe_path(Origin,Destination,ProhibitedNodes,Path),
+        length(Path,Len)
+    ),ListOfPaths).
 
 
+connects_bfs([[F|T]|_], F, _, [F|T]).
+connects_bfs([[S|T]|R], F, V, Sol):-
+    findall([N,S|T],
+        ( edge(S, N),
+        \+ member(N, V),
+        \+ member(N, [S|T])
+    ), L),
+    append(R, L, NR),
+    connects_bfs(NR, F, [S|V],Sol).
 
 
 
